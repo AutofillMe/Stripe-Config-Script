@@ -1,10 +1,18 @@
 # Stripe-Config-Script
 Wrapper that runs all necessary tasks to check, validate, and correct a client's Stripe configuration for Switch Ops
 
+Currently, this uses 2 sub-processes:
+- Standardize the Stripe export file
+  > https://github.com/AutofillMe/Stripe-Export-Standardizer
+- Check the client's current configuration against the expected configuration prior to initiation of a Stripe switch
+  > https://github.com/AutofillMe/Stripe-Client-Config-Checker
+
+Both are maintained independently of the wrapper to keep track of issues, features, and development separately.
+
 ## How to run
 Usage:
 ```
-usage: stripeConfigScript.py [-h] [-a A_ID] [-t CLIENTTYPE] [-f STRIPEEXPORT]
+python3 stripeConfigScript.py [-h] [-a A_ID] [-t CLIENTTYPE] [-f STRIPEEXPORT]
 ```
 
 Options:

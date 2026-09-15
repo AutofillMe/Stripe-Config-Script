@@ -4,6 +4,33 @@ import subprocess
 import sys
 from pathlib import Path
 
+parser = argparse.ArgumentParser()
+
+parser.add_argument(
+    "-a",
+    "--acct",
+    dest="a_id",
+    help="<str> account_id of the client",
+)
+
+parser.add_argument(
+    "-t",
+    "--client-type",
+    dest="clientType",
+    type=int,
+    help="<int> what type of client they are (1, 2, 3, 4)",
+)
+
+parser.add_argument(
+    "-f",
+    "--file",
+    dest="stripeExport",
+    type=Path,
+    help="<path> path to csv file to parse data from",
+)
+
+args = parser.parse_args()
+
 
 def checkGit() -> bool:
     gitFound: bool = False
@@ -21,11 +48,15 @@ def checkGit() -> bool:
 
 
 def checkScripts() -> bool:
-    pathToExportStandardizer: Path = Path(
-        "./Stripe-Export-Standarizer/stripeExportStandardizer.py"
-    )
-    pathToConfigChecker: Path = Path("./Stripe-Config-Checker/checkConfig.py")
+    print("Checking for necessary scripts...")
 
+    # Default script paths
+    pathToExportStandardizer: Path = Path(
+        "./Stripe-Export-Standardizer/stripeExportStandardizer.py"
+    )
+    pathToConfigChecker: Path = Path("./Stripe-Client-Config-Checker/checkConfig.py")
+
+    # Check standardizer exits and if not, clone it
     if not pathToExportStandardizer.exists():
         try:
             subprocess.run(
@@ -33,7 +64,7 @@ def checkScripts() -> bool:
                     "git",
                     "clone",
                     "https://github.com/AutofillMe/Stripe-Export-Standardizer.git",
-                    "./Stripe-Export-Standarizer",
+                    "./Stripe-Export-Standardizer",
                 ],
                 check=True,
             )
@@ -41,6 +72,7 @@ def checkScripts() -> bool:
             print(f"git clone export standardizer failed with error {e}")
             raise SystemExit(e.returncode)
 
+    # Check configChecker exists and if not, clone it
     if not pathToConfigChecker.exists():
         try:
             subprocess.run(
@@ -64,11 +96,13 @@ def runScripts(recentStripeExport: Path, clientType: int, accountID: str) -> Non
     subprocess.run(
         [
             sys.executable,
-            Path("./Stripe-Export-Standarizer/stripeExportStandardizer.py"),
+            Path("./Stripe-Export-Standardizer/stripeExportStandardizer.py"),
             "-i",
             recentStripeExport,
             "-o",
             Path("./Stripe-Client-Config-Checker/recentStripeExport-clean.csv"),
+            "-c",
+            Path("./Stripe-Export-Standardizer/config.txt"),
         ],
         check=True,
     )
@@ -84,23 +118,24 @@ def runScripts(recentStripeExport: Path, clientType: int, accountID: str) -> Non
             clientType,
             "-a",
             accountID,
+            "-c",
+            Path("./Stripe-Client-Config-Checker/clientTypeChart.csv"),
         ],
-        check=True,
     )
 
 
-def main() -> None:
-    # TEST: delete later
-    clientType: int = 1
-    accountID: str = "testing"
-    recentStripeExport: Path = "./"
-    # TEST: delete later
+def main(args: argparse.Namespace) -> int:
+    accountID: str = args.a_id
+    clientType: str = str(args.clientType)
+    recentStripeExport: Path = args.stripeExport or Path("./export.csv")
 
     if not checkGit() or not checkScripts():
         raise SystemExit(1)
+
+    print("Running config check...")
     runScripts(recentStripeExport, clientType, accountID)
     return 0
 
 
 if __name__ == "__main__":
-    main()
+    main(args)

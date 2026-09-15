@@ -50,43 +50,40 @@ def checkGit() -> bool:
 def checkScripts() -> bool:
     print("Checking for necessary scripts...")
 
+    repos = [
+        (
+            Path("./Stripe-Export-Standardizer"),
+            "https://github.com/AutofillMe/Stripe-Export-Standardizer.git",
+        ),
+        (
+            Path("./Stripe-Client-Config-Checker"),
+            "https://github.com/AutofillMe/Stripe-Client-Config-Checker.git",
+        ),
+    ]
+
+    for repoPath, repoUrl in repos:
+        try:
+            if not repoPath.exists():
+                print(f"Cloning {repoPath}...")
+                subprocess.run(
+                    ["git", "clone", repoUrl, str(repoPath)],
+                    check=True,
+                )
+            else:
+                print(f"Updating {repoPath}...")
+                subprocess.run(
+                    ["git", "-C", str(repoPath), "pull"],
+                    check=True,
+                )
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to update {repoPath}: {e}")
+            raise SystemExit(e.returncode)
+
     # Default script paths
-    pathToExportStandardizer: Path = Path(
+    pathToExportStandardizer = Path(
         "./Stripe-Export-Standardizer/stripeExportStandardizer.py"
     )
-    pathToConfigChecker: Path = Path("./Stripe-Client-Config-Checker/checkConfig.py")
-
-    # Check standardizer exits and if not, clone it
-    if not pathToExportStandardizer.exists():
-        try:
-            subprocess.run(
-                [
-                    "git",
-                    "clone",
-                    "https://github.com/AutofillMe/Stripe-Export-Standardizer.git",
-                    "./Stripe-Export-Standardizer",
-                ],
-                check=True,
-            )
-        except subprocess.CalledProcessError as e:
-            print(f"git clone export standardizer failed with error {e}")
-            raise SystemExit(e.returncode)
-
-    # Check configChecker exists and if not, clone it
-    if not pathToConfigChecker.exists():
-        try:
-            subprocess.run(
-                [
-                    "git",
-                    "clone",
-                    "https://github.com/AutofillMe/Stripe-Client-Config-Checker.git",
-                    "./Stripe-Client-Config-Checker",
-                ],
-                check=True,
-            )
-        except subprocess.CalledProcessError as e:
-            print(f"git clone config checker failed with error {e}")
-            raise SystemExit(e.returncode)
+    pathToConfigChecker = Path("./Stripe-Client-Config-Checker/checkConfig.py")
 
     return pathToConfigChecker.exists() and pathToExportStandardizer.exists()
 

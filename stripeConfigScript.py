@@ -126,6 +126,18 @@ def main(args: argparse.Namespace) -> int:
     clientType: str = str(args.clientType)
     recentStripeExport: Path = args.stripeExport or Path("./export.csv")
 
+    # Check if script is up to date
+    try:
+        print(f"Updating main...")
+        subprocess.run(
+            ["git", "-C", "./", "pull"],
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to update main: {e}")
+        raise SystemExit(e.returncode)
+
+    # main script
     if not checkGit() or not checkScripts():
         raise SystemExit(1)
 

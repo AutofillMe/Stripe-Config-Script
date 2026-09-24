@@ -21,8 +21,14 @@ Once python is installed, run:
 pip install pandas
 ```
 
-## How to run
-Usage:
+## Usage
+Please download this repo by running:
+```
+git clone https://github.com/AutofillMe/Stripe-Config-Script.git ./Stripe-Config-Script
+```
+
+### How to run
+Inside the folder that was created:
 ```
 python3 stripeConfigScript.py [-h] [-a A_ID] [-t CLIENTTYPE] [-f STRIPEEXPORT]
 ```

@@ -28,7 +28,7 @@ git clone https://github.com/AutofillMe/Stripe-Config-Script.git ./Stripe-Config
 ```
 
 ### How to run
-Inside the folder that was created:
+Inside the folder that was created, run:
 ```
 python3 stripeConfigScript.py [-h] [-a A_ID] [-t CLIENTTYPE] [-f STRIPEEXPORT]
 ```

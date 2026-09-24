@@ -30,18 +30,18 @@ git clone https://github.com/AutofillMe/Stripe-Config-Script.git ./Stripe-Config
 ### How to run
 Inside the folder that was created, run:
 ```
-python3 stripeConfigScript.py [-h] [-a A_ID] [-t CLIENTTYPE] [-f STRIPEEXPORT]
+python3 stripeConfigScript.py [-h] [-a A_ID] [-t CLIENT_TYPE] [-f STRIPE_EXPORT]
 ```
 
 Options:
 ```
 -h, --help                      show this help message and exit
 -a, --acct A_ID                 <str> account_id of the client
--t, --client-type CLIENTTYPE    <int> what type of client they are (1, 2, 3, 4)
--f, --file STRIPEEXPORT         <path> path to csv file to parse data from
+-t, --client-type CLIENT_TYPE   <int> what type of client they are (1, 2, 3, 4)
+-f, --file STRIPE_EXPORT        <path> path to csv file to parse data from
 ```
 
-The script expects the following default file tree (unless otherwise specified by passing the -f flag):
+The script expects the following default file tree and name (unless otherwise specified by passing the -f flag):
 ```
 project/
     ├── export.csv

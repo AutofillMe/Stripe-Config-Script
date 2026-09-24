@@ -9,6 +9,18 @@ Currently, this uses 2 sub-processes:
 
 Both are maintained independently of the wrapper to keep track of issues, features, and development separately.
 
+## Requirements
+Python >= 3.14 [download here](https://www.python.org/downloads/)
+
+Make sure you add Python to your PATH
+
+Git: [download here](https://git-scm.com/)
+
+Once python is installed, run:
+```
+pip install pandas
+```
+
 ## How to run
 Usage:
 ```

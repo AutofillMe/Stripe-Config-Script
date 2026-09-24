@@ -92,9 +92,7 @@ def checkScripts() -> bool:
             raise SystemExit(e.returncode)
 
     # Default script paths
-    pathToExportStandardizer = Path(
-        "./Stripe-Export-Standardizer/stripeExportStandardizer.py"
-    )
+    pathToExportStandardizer = Path("./Stripe-Export-Standardizer/stripeExportStandardizer.py")  # fmt: skip
     pathToConfigChecker = Path("./Stripe-Client-Config-Checker/checkConfig.py")
 
     return pathToConfigChecker.exists() and pathToExportStandardizer.exists()

@@ -33,6 +33,12 @@ args = parser.parse_args()
 
 
 def checkGit() -> bool:
+    """
+    Task:
+    Checks to make sure git exists
+    ---
+    OUT: True/False git found <bool>
+    """
     gitFound: bool = False
     gitPath: Path = shutil.which("git")
 
@@ -48,6 +54,12 @@ def checkGit() -> bool:
 
 
 def checkScripts() -> bool:
+    """
+    Task:
+    Checks if the submodule scripts exists and checks up to date
+    ---
+    OUT: True/False submodules exist and up to date <bool>
+    """
     print("Checking for necessary scripts...")
 
     repos = [
@@ -89,6 +101,17 @@ def checkScripts() -> bool:
 
 
 def runScripts(recentStripeExport: Path, clientType: int, accountID: str) -> None:
+    """
+    Task:
+    Executes the submodules to standardize then parse the client's config and spits out a recommendation
+    ---
+    Notes:
+    The recommendations are not returned, rather they are printed to stdout
+    ---
+    IN: path to most recent weekly Stripe configuration export (default: ./export.csv) <Path>
+    IN: client type (1-4) <int>
+    IN: Stripe account ID of client (acct_xxxxxx...) <str>
+    """
     # First, standardize the export
     subprocess.run(
         [
@@ -112,7 +135,7 @@ def runScripts(recentStripeExport: Path, clientType: int, accountID: str) -> Non
             "-f",
             Path("./Stripe-Client-Config-Checker/recentStripeExport-clean.csv"),
             "-t",
-            clientType,
+            str(clientType),
             "-a",
             accountID,
             "-c",
@@ -122,8 +145,18 @@ def runScripts(recentStripeExport: Path, clientType: int, accountID: str) -> Non
 
 
 def main(args: argparse.Namespace) -> int:
+    """
+    Task:
+    Make sure the main script is up to date, then run the script
+    ---
+    IN: arguments <ArgumentParser: argparse.Namespace>
+    """
     accountID: str = args.a_id
-    clientType: str = str(args.clientType)
+    if 1 <= args.clientType <= 4:
+        clientType: int = args.clientType
+    else:
+        print("Please enter a valid client type.")
+        raise SystemExit(1)
     recentStripeExport: Path = args.stripeExport or Path("./export.csv")
 
     # Check if script is up to date

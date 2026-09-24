@@ -41,3 +41,7 @@ project/
     ├── export.csv
     └── stripeConfigScript.py
 ```
+
+## Features under Consideration
+- Batch process acct_ids
+- Auto-copy recommended fixes to clipboard (would need separate implementation for Windows and Mac/Linux)
